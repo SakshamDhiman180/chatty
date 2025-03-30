@@ -1,0 +1,35 @@
+# Node modules
+node_modules/
+Backend/node_modules/
+F/node_modules/
+
+# Environment variables
+.env
+Backend/.env
+Frontend/.env
+
+# Build output
+build/
+F/build/
+dist/
+Backend/dist/
+
+# Logs and debug files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+debug.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Coverage reports (if using Jest or similar)
+coverage/
+Backend/coverage/
+F/coverage/
+
+# Production files (if applicable)
+*.log
+*.cache
