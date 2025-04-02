@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import { generateToken } from '../lib/utils.js';
 import User from '../models/userModel.js';
 import e from 'express';
+import cloudinary from '../lib/cloudinary.js';
 
 export const signup = async (req, res) => {
     const { fullname, email, password, phone } = req.body;
@@ -89,4 +90,35 @@ export const logout = (req, res) => {
         console.error(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
+
 }
+
+export const updateProfile = async (req, res) => {
+    try {
+        const {profilePic} = req.body;
+        const userId = req.user._id;
+
+        if (!profilePic) {
+            return res.status(400).json({ message: 'Profile picture is required' });
+        }
+        const uploadResponse = await cloudinary.uploader.upload(profilePic)
+        const updatedUser = await User.findByIdAndUpdate(userId, {
+            profilePic: uploadResponse.secure_url,
+        }, { new: true });
+        
+        return res.status(200).json({ message: 'Profile updated successfully', user: updatedUser });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+}
+
+export const checkAuth = (req, res) => {
+    try {
+        return res.status(200).json({ message: 'User is authenticated', user: req.user });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+} 
